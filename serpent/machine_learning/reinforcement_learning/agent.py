@@ -12,9 +12,9 @@ from serpent.utilities import SerpentError
 import os
 import json
 import time
-import random
 
 import numpy as np
+import secrets
 
 
 class Agent:
@@ -49,7 +49,7 @@ class Agent:
 
         self.analytics_client = AnalyticsClient(project_key=config["analytics"]["topic"])
 
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
 
         self.logger = Agent.logger_mapping[logger](logger_kwargs=logger_kwargs)

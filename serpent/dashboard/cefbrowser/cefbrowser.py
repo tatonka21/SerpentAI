@@ -9,7 +9,6 @@ import ctypes
 from functools import partial
 import json
 import os
-import random
 import time
 
 from kivy.core.clipboard import Clipboard
@@ -30,6 +29,7 @@ from kivy.uix.widget import Widget
 
 from .cefpython import cefpython, cefpython_initialize
 from .cefkeyboard import CEFKeyboardManager
+import secrets
 
 
 class CEFAlreadyInitialized(Exception):
@@ -1098,7 +1098,7 @@ class ClientHandler:
             )
             allow_popup = False
         if allow_popup:
-            r = random.randint(1, 2**31-1)
+            r = secrets.SystemRandom().randint(1, 2**31-1)
             wi = cefpython.WindowInfo()
             wi.SetAsChild(0, [0, 0, 0, 0])
             wi.SetAsOffscreen(r)
