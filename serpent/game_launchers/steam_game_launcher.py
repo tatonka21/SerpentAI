@@ -4,6 +4,7 @@ from serpent.utilities import is_linux, is_macos, is_windows
 import shlex
 import subprocess
 import webbrowser
+from security import safe_command
 
 
 class SteamGameLauncher(GameLauncher):
@@ -25,8 +26,8 @@ class SteamGameLauncher(GameLauncher):
             protocol_string += "/en/" + " ".join(args_list)
 
         if is_linux():
-            subprocess.call(shlex.split(f"xdg-open '{protocol_string}'"))
+            safe_command.run(subprocess.call, shlex.split(f"xdg-open '{protocol_string}'"))
         elif is_macos():
-            subprocess.call(shlex.split(f"open '{protocol_string}'"))
+            safe_command.run(subprocess.call, shlex.split(f"open '{protocol_string}'"))
         elif is_windows():
             webbrowser.open(f"{protocol_string}")

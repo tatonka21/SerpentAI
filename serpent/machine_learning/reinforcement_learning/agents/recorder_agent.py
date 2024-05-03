@@ -24,6 +24,7 @@ import shlex
 import h5py
 
 from redis import StrictRedis
+from security import safe_command
 
 
 class RecorderAgent(Agent):
@@ -62,7 +63,7 @@ class RecorderAgent(Agent):
         InputRecorder.pause_input_recording()
 
         input_recorder_command = "serpent record_inputs"
-        self.input_recorder_process = subprocess.Popen(shlex.split(input_recorder_command))
+        self.input_recorder_process = safe_command.run(subprocess.Popen, shlex.split(input_recorder_command))
 
         signal.signal(signal.SIGINT, self._handle_signal)
         signal.signal(signal.SIGTERM, self._handle_signal)
