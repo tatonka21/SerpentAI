@@ -1079,7 +1079,7 @@ class ClientHandler:
         Logger.debug("\tBrowser Settings: %s", browser_settings_out)
         Logger.debug("\tNo JavaScript Access: %s", no_javascript_access_out)
         bw = self.browser_widgets[browser]
-        if hasattr(bw.popup_policy, "__call__"):
+        if callable(bw.popup_policy):
             try:
                 allow_popup = bw.popup_policy(bw, target_url)
                 Logger.info(
@@ -1129,7 +1129,7 @@ class ClientHandler:
             if not bw:
                 bw = client_handler.browser_widgets[
                     client_handler.browser_widgets.iterkeys().next()]
-            if hasattr(bw.popup_handler, "__call__"):
+            if callable(bw.popup_handler):
                 try:
                     bw.popup_handler(bw, cb)
                 except Exception as err:
@@ -1156,7 +1156,7 @@ class ClientHandler:
         bw.focus = False
         if bw._selection_bubble.parent:
             bw._selection_bubble.parent.remove_widget(bw._selection_bubble)
-        if hasattr(bw.close_handler, "__call__"):
+        if callable(bw.close_handler):
             try:
                 bw.close_handler(bw)
             except Exception as err:
