@@ -6,7 +6,6 @@ import time
 import uuid
 import pickle
 import h5py
-import random
 import json
 
 import subprocess
@@ -40,6 +39,7 @@ import skimage.util
 from redis import StrictRedis
 
 from datetime import datetime
+import secrets
 
 
 class GameAgentError(BaseException):
@@ -431,7 +431,7 @@ class GameAgent(offshoot.Pluggable):
         time.sleep(1)
 
     def reward_test(self, frames, **kwargs):
-        return random.choice(range(0, 10))
+        return secrets.choice(range(0, 10))
 
     def _setup_frame_handler(self, frame_handler=None, **kwargs):
         frame_handler = frame_handler or self.config.get("frame_handler", "NOOP")
