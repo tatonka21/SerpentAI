@@ -11,6 +11,7 @@ import offshoot
 from serpent.utilities import clear_terminal, display_serpent_logo, is_linux, is_macos, is_windows, is_unix, wait_for_crossbar
 
 from serpent.window_controller import WindowController
+from security import safe_command
 
 # Add the current working directory to sys.path to discover user plugins!
 sys.path.insert(0, os.getcwd())
@@ -150,17 +151,17 @@ def setup_base():
     print("Installing dependencies...")
 
     if is_linux():
-        subprocess.call(shlex.split("pip install python-xlib"))
+        safe_command.run(subprocess.call, shlex.split("pip install python-xlib"))
     elif is_macos():
-        subprocess.call(shlex.split("pip install python-xlib pyobjc-framework-Quartz py-applescript"))
+        safe_command.run(subprocess.call, shlex.split("pip install python-xlib pyobjc-framework-Quartz py-applescript"))
     elif is_windows():
         # Anaconda Packages
-        subprocess.call(shlex.split("conda install numpy scipy scikit-image scikit-learn h5py -y"), shell=True)
+        safe_command.run(subprocess.call, shlex.split("conda install numpy scipy scikit-image scikit-learn h5py -y"), shell=True)
 
-    subprocess.call(shlex.split("pip install -r requirements.txt"))
+    safe_command.run(subprocess.call, shlex.split("pip install -r requirements.txt"))
     
     # Install Crossbar
-    subprocess.call(shlex.split("pip install crossbar==18.6.1"))
+    safe_command.run(subprocess.call, shlex.split("pip install crossbar==18.6.1"))
 
     # Create Dataset Directories
     os.makedirs(os.path.join(os.getcwd(), "datasets/collect_frames"), exist_ok=True)
@@ -185,9 +186,9 @@ def setup_ocr():
     input("Press Enter to continue...")
 
     if is_unix():
-        subprocess.call(shlex.split("pip install tesserocr"))
+        safe_command.run(subprocess.call, shlex.split("pip install tesserocr"))
     elif is_windows():
-        subprocess.call(shlex.split("pip install pytesseract"))
+        safe_command.run(subprocess.call, shlex.split("pip install pytesseract"))
 
     print("")
     print("OCR module setup complete!")
@@ -205,12 +206,12 @@ def setup_gui():
     input("Press Enter to continue...")
 
     if is_linux():
-        subprocess.call(shlex.split("pip install Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install Kivy==1.10.0"))
     elif is_macos():
-        subprocess.call(shlex.split("pip install pygame Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install pygame Kivy==1.10.0"))
     elif is_windows():
-        subprocess.call(shlex.split("pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew"))
-        subprocess.call(shlex.split("pip install Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew"))
+        safe_command.run(subprocess.call, shlex.split("pip install Kivy==1.10.0"))
 
     print("")
     print("GUI module setup complete!")
@@ -234,11 +235,11 @@ def setup_ml():
         tensorflow_backend = "CPU"
 
     if tensorflow_backend == "GPU":
-        subprocess.call(shlex.split("pip install tensorflow-gpu==1.5.1"))
+        safe_command.run(subprocess.call, shlex.split("pip install tensorflow-gpu==1.5.1"))
     elif tensorflow_backend == "CPU":
-        subprocess.call(shlex.split("pip install tensorflow==1.5.1"))
+        safe_command.run(subprocess.call, shlex.split("pip install tensorflow==1.5.1"))
 
-    subprocess.call(shlex.split("pip install Keras tensorforce==0.3.5.1"))
+    safe_command.run(subprocess.call, shlex.split("pip install Keras tensorforce==0.3.5.1"))
 
     print("")
     print("ML module setup complete!")
@@ -274,18 +275,18 @@ def setup_dashboard():
 
     # Install Kivy
     if is_linux():
-        subprocess.call(shlex.split("pip install Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install Kivy==1.10.0"))
     elif is_macos():
-        subprocess.call(shlex.split("pip install pygame Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install pygame Kivy==1.10.0"))
     elif is_windows():
-        subprocess.call(shlex.split("pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew"))
-        subprocess.call(shlex.split("pip install Kivy==1.10.0"))
+        safe_command.run(subprocess.call, shlex.split("pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew"))
+        safe_command.run(subprocess.call, shlex.split("pip install Kivy==1.10.0"))
 
     # Install CEFPython
-    subprocess.call(shlex.split("pip install cefpython3==57.1"))
+    safe_command.run(subprocess.call, shlex.split("pip install cefpython3==57.1"))
 
     # Install Pony ORM
-    subprocess.call(shlex.split("pip install pony==0.7.3"))
+    safe_command.run(subprocess.call, shlex.split("pip install pony==0.7.3"))
 
 
 # TODO: Bring this up to date for dev branch
@@ -296,7 +297,7 @@ def update():
 
     print("Updating Serpent.AI to the latest version...")
 
-    subprocess.call(shlex.split("pip install --upgrade SerpentAI"))
+    safe_command.run(subprocess.call, shlex.split("pip install --upgrade SerpentAI"))
 
     if is_linux():
         shutil.copy(
@@ -314,7 +315,7 @@ def update():
             os.path.join(os.getcwd(), "requirements.txt")
         )
 
-    subprocess.call(shlex.split("pip install -r requirements.txt"))
+    safe_command.run(subprocess.call, shlex.split("pip install -r requirements.txt"))
 
     import yaml
 
@@ -377,11 +378,11 @@ def grab_frames(width, height, x_offset, y_offset, pipeline_string=None):
 
 
 def activate(plugin_name):
-    subprocess.call(shlex.split(f"offshoot install {plugin_name}"))
+    safe_command.run(subprocess.call, shlex.split(f"offshoot install {plugin_name}"))
 
 
 def deactivate(plugin_name):
-    subprocess.call(shlex.split(f"offshoot uninstall {plugin_name}"))
+    safe_command.run(subprocess.call, shlex.split(f"offshoot uninstall {plugin_name}"))
 
 
 def plugins():
@@ -535,7 +536,7 @@ def generate_game_plugin():
 
     prepare_game_plugin(game_name, game_platform)
 
-    subprocess.call(shlex.split(f"serpent activate Serpent{game_name}GamePlugin"))
+    safe_command.run(subprocess.call, shlex.split(f"serpent activate Serpent{game_name}GamePlugin"))
 
 
 def generate_game_agent_plugin():
@@ -550,7 +551,7 @@ def generate_game_agent_plugin():
 
     prepare_game_agent_plugin(game_agent_name)
 
-    subprocess.call(shlex.split(f"serpent activate Serpent{game_agent_name}GameAgentPlugin"))
+    safe_command.run(subprocess.call, shlex.split(f"serpent activate Serpent{game_agent_name}GameAgentPlugin"))
 
 
 def prepare_game_plugin(game_name, game_platform):
