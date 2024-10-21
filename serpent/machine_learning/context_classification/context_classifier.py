@@ -1,9 +1,9 @@
 import serpent.datasets
 
 import os
-import random
 
 import skimage.io
+import secrets
 
 
 class ContextClassifierError(BaseException):
@@ -87,7 +87,7 @@ class ContextClassifier:
         context_classifier_class = cls.context_classifier_mapping().get(classifier)
 
         if context_classifier_class is not None:
-            context_path = random.choice(context_paths)
+            context_path = secrets.choice(context_paths)
             frame_path = None
 
             for root, directories, files in os.walk(context_path):
