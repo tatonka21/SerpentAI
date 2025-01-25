@@ -1,10 +1,10 @@
 import os
-import random
 
 import torch
 from torch import nn, optim
 
 from serpent.machine_learning.reinforcement_learning.rainbow_dqn.dqn import DQN3, DQN4
+import secrets
 
 
 conv_layers_dqn_class_mapping = {
@@ -74,7 +74,7 @@ class RainbowAgent:
             return (self.online_net(state.unsqueeze(0)) * self.support).sum(2).argmax(1).item()
 
     def act_e_greedy(self, state, epsilon=0.001):
-        return random.randrange(self.action_space) if random.random() < epsilon else self.act(state)
+        return secrets.SystemRandom().randrange(self.action_space) if secrets.SystemRandom().random() < epsilon else self.act(state)
 
     def learn(self, replay_memory):
         idxs, states, actions, returns, next_states, nonterminals, weights = replay_memory.sample(self.batch_size)
