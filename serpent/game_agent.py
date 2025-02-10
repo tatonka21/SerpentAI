@@ -40,6 +40,7 @@ import skimage.util
 from redis import StrictRedis
 
 from datetime import datetime
+from security import safe_command
 
 
 class GameAgentError(BaseException):
@@ -452,7 +453,7 @@ class GameAgent(offshoot.Pluggable):
 
         input_recorder_command = "serpent record_inputs"
 
-        self.input_recorder_process = subprocess.Popen(shlex.split(input_recorder_command))
+        self.input_recorder_process = safe_command.run(subprocess.Popen, shlex.split(input_recorder_command))
 
         signal.signal(signal.SIGINT, self._handle_signal)
         signal.signal(signal.SIGTERM, self._handle_signal)

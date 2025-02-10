@@ -1,6 +1,7 @@
 from serpent.utilities import SerpentError, is_windows, wait_for_crossbar
 
 from serpent.config import config
+from security import safe_command
 
 if is_windows():
     import win32api
@@ -89,7 +90,7 @@ class DashboardApp(App):
 
         analytics_publisher_command = "python dashboard/analytics_component.py"
 
-        self.analytics_publisher_process = subprocess.Popen(shlex.split(analytics_publisher_command))
+        self.analytics_publisher_process = safe_command.run(subprocess.Popen, shlex.split(analytics_publisher_command))
 
         signal.signal(signal.SIGINT, self._handle_signal_analytics_publisher)
         signal.signal(signal.SIGTERM, self._handle_signal_analytics_publisher)
@@ -111,7 +112,7 @@ class DashboardApp(App):
 
         dashboard_api_command = f"python dashboard/dashboard_api_component.py"
 
-        self.dashboard_api_process = subprocess.Popen(shlex.split(dashboard_api_command))
+        self.dashboard_api_process = safe_command.run(subprocess.Popen, shlex.split(dashboard_api_command))
 
         signal.signal(signal.SIGINT, self._handle_signal_dashboard_api)
         signal.signal(signal.SIGTERM, self._handle_signal_dashboard_api)

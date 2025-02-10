@@ -4,6 +4,7 @@ import subprocess
 import shlex
 
 import re
+from security import safe_command
 
 
 class LinuxWindowController(WindowController):
@@ -15,16 +16,16 @@ class LinuxWindowController(WindowController):
         return subprocess.check_output(shlex.split(f"xdotool search --onlyvisible --name \"^{name}$\"")).decode("utf-8").strip()
 
     def move_window(self, window_id, x, y):
-        subprocess.call(shlex.split(f"xdotool windowmove {window_id} {x} {y}"))
+        safe_command.run(subprocess.call, shlex.split(f"xdotool windowmove {window_id} {x} {y}"))
 
     def resize_window(self, window_id, width, height):
-        subprocess.call(shlex.split(f"xdotool windowsize {window_id} {width} {height}"))
+        safe_command.run(subprocess.call, shlex.split(f"xdotool windowsize {window_id} {width} {height}"))
 
     def focus_window(self, window_id):
-        subprocess.call(shlex.split(f"xdotool windowactivate {window_id}"))
+        safe_command.run(subprocess.call, shlex.split(f"xdotool windowactivate {window_id}"))
 
     def bring_window_to_top(self, window_id):
-        subprocess.call(shlex.split(f"xdotool windowactivate {window_id}"))
+        safe_command.run(subprocess.call, shlex.split(f"xdotool windowactivate {window_id}"))
 
     def is_window_focused(self, window_id):
         focused_window_id = subprocess.check_output(shlex.split("xdotool getwindowfocus")).decode("utf-8").strip()
