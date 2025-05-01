@@ -3,9 +3,8 @@ from serpent.machine_learning.reinforcement_learning.agent import Agent
 from serpent.enums import InputControlTypes
 
 from serpent.logger import Loggers
-
-import random
 import enum
+import secrets
 
 
 class RandomAgentModes(enum.Enum):
@@ -43,7 +42,7 @@ class RandomAgent(Agent):
 
         for game_inputs_item in self.game_inputs:
             if game_inputs_item["control_type"] == InputControlTypes.DISCRETE:
-                label = random.choice(list(game_inputs_item["inputs"].keys()))
+                label = secrets.choice(list(game_inputs_item["inputs"].keys()))
                 action = game_inputs_item["inputs"][label]
 
                 actions.append((label, action, None))
@@ -57,8 +56,7 @@ class RandomAgent(Agent):
                     size = game_inputs_item["inputs"]["size"]
 
                 if size == 1:
-                    input_value = random.uniform(
-                        game_inputs_item["inputs"]["minimum"],
+                    input_value = secrets.SystemRandom().uniform(game_inputs_item["inputs"]["minimum"],
                         game_inputs_item["inputs"]["maximum"]
                     )
                 else:
@@ -66,8 +64,7 @@ class RandomAgent(Agent):
 
                     for i in range(size):
                         input_value.append(
-                            random.uniform(
-                                game_inputs_item["inputs"]["minimum"],
+                            secrets.SystemRandom().uniform(game_inputs_item["inputs"]["minimum"],
                                 game_inputs_item["inputs"]["maximum"]
                             )
                         )
