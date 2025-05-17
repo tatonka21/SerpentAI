@@ -23,6 +23,7 @@ from luminoth.predict import predict_image as luminoth_predict
 from serpent.machine_learning.object_recognition.object_recognizer import ObjectRecognizer
 
 from serpent.utilities import SerpentError
+from security import safe_command
 
 
 class LuminothObjectRecognizer(ObjectRecognizer):
@@ -81,7 +82,7 @@ class LuminothObjectRecognizer(ObjectRecognizer):
 
         # Attempt to make a video if FFMPEG is in PATH
         try:
-            subprocess.call(shlex.split("ffmpeg -framerate 10 -i datasets/predicted/%06d.png  -c:v libx264 -r 30 -pix_fmt yuv420p datasets/predicted/predicted.mp4"))
+            safe_command.run(subprocess.call, shlex.split("ffmpeg -framerate 10 -i datasets/predicted/%06d.png  -c:v libx264 -r 30 -pix_fmt yuv420p datasets/predicted/predicted.mp4"))
         except Exception:
             pass
 

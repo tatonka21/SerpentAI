@@ -1,4 +1,6 @@
 import warnings
+from security import safe_command
+
 warnings.simplefilter("ignore")
 
 import offshoot
@@ -143,7 +145,7 @@ class Game(offshoot.Pluggable):
 
         time.sleep(1)
 
-        subprocess.call(shlex.split(f"serpent launch {self.game_name}"))
+        safe_command.run(subprocess.call, shlex.split(f"serpent launch {self.game_name}"))
         self.launch(dry_run=True)
 
         self.start_frame_grabber()
@@ -284,7 +286,7 @@ class Game(offshoot.Pluggable):
         if pipeline_string is not None:
             frame_grabber_command += f" {pipeline_string}"
 
-        self.frame_grabber_process = subprocess.Popen(shlex.split(frame_grabber_command))
+        self.frame_grabber_process = safe_command.run(subprocess.Popen, shlex.split(frame_grabber_command))
 
         signal.signal(signal.SIGINT, self._handle_signal_frame_grabber)
         signal.signal(signal.SIGTERM, self._handle_signal_frame_grabber)
@@ -314,7 +316,7 @@ class Game(offshoot.Pluggable):
 
         crossbar_command = f"crossbar start --config crossbar.json"
 
-        self.crossbar_process = subprocess.Popen(shlex.split(crossbar_command))
+        self.crossbar_process = safe_command.run(subprocess.Popen, shlex.split(crossbar_command))
 
         signal.signal(signal.SIGINT, self._handle_signal_crossbar)
         signal.signal(signal.SIGTERM, self._handle_signal_crossbar)
@@ -340,7 +342,7 @@ class Game(offshoot.Pluggable):
 
         input_controller_command = f"python -m serpent.wamp_components.input_controller_component"
 
-        self.input_controller_process = subprocess.Popen(shlex.split(input_controller_command))
+        self.input_controller_process = safe_command.run(subprocess.Popen, shlex.split(input_controller_command))
 
         signal.signal(signal.SIGINT, self._handle_signal_input_controller)
         signal.signal(signal.SIGTERM, self._handle_signal_input_controller)
