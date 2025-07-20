@@ -146,7 +146,7 @@ class LuminothObjectRecognizer(ObjectRecognizer):
     def _generate_predict_luminoth_config(self, **kwargs):
         if self.algorithm is None:
             with open(f"{self.model_path}/luminoth.yml") as f:
-                config = yaml.load(f)
+                config = yaml.load(f, Loader=yaml.SafeLoader)
 
             self.algorithm = config["model"]["type"]
 
