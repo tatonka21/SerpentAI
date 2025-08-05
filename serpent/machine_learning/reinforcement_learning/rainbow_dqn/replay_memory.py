@@ -1,9 +1,9 @@
 import collections
-import random
 
 import torch
 
 from serpent.machine_learning.reinforcement_learning.rainbow_dqn.segment_tree import SegmentTree
+import secrets
 
 
 Transition = collections.namedtuple("Transition", ("timestep", "state", "action", "reward", "nonterminal"))
@@ -111,7 +111,7 @@ class ReplayMemory:
         valid = False
 
         while not valid:
-            sample = random.uniform(i * segment, (i + 1) * segment)
+            sample = secrets.SystemRandom().uniform(i * segment, (i + 1) * segment)
             probability, index, tree_index = self.transitions.find(sample)
 
             if (self.transitions.index - index) % self.capacity > self.multi_step and (index - self.transitions.index) % self.capacity >= self.history and probability != 0:
