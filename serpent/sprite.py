@@ -1,7 +1,6 @@
 import numpy as np
-
-import random
 import uuid
+import secrets
 
 
 class SpriteError(BaseException):
@@ -95,10 +94,10 @@ class Sprite:
             constellation_of_pixels.append(dict())
 
             for ii in range(quantity):
-                signature_color = random.choice(list(self.signature_colors[i]))
+                signature_color = secrets.choice(list(self.signature_colors[i]))
                 signature_color_locations = Sprite.locate_color(signature_color, np.squeeze(self.image_data[:, :, :3, i]))
 
-                y, x = random.choice(signature_color_locations)
+                y, x = secrets.choice(signature_color_locations)
                 constellation_of_pixels[i][(y, x)] = signature_color
 
         return constellation_of_pixels

@@ -14,7 +14,6 @@ from serpent.utilities import SerpentError
 import os
 import io
 import enum
-import random
 import json
 
 import numpy as np
@@ -22,6 +21,7 @@ import h5py
 
 import skimage.io
 import skimage.util
+import secrets
 
 try:
     import torch
@@ -175,7 +175,7 @@ class RainbowDQNAgent(Agent):
         self.current_state = torch.stack(frames, 0)
 
         if self.mode == RainbowDQNAgentModes.OBSERVE and self.observe_mode == "RANDOM":
-            self.current_action = random.randint(0, len(self.game_inputs[0]["inputs"]) - 1)
+            self.current_action = secrets.SystemRandom().randint(0, len(self.game_inputs[0]["inputs"]) - 1)
         elif self.mode == RainbowDQNAgentModes.OBSERVE and self.observe_mode == "MODEL":
             self.agent.reset_noise()
             self.current_action = self.agent.act(self.current_state)

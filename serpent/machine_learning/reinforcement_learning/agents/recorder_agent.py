@@ -10,8 +10,6 @@ from serpent.enums import InputControlTypes
 from serpent.logger import Loggers
 
 from serpent.config import config
-
-import random
 import time
 import pickle
 
@@ -24,6 +22,7 @@ import shlex
 import h5py
 
 from redis import StrictRedis
+import secrets
 
 
 class RecorderAgent(Agent):
@@ -80,7 +79,7 @@ class RecorderAgent(Agent):
 
         for game_inputs_item in self.game_inputs:
             if game_inputs_item["control_type"] == InputControlTypes.DISCRETE:
-                label = random.choice(list(game_inputs_item["inputs"].keys()))
+                label = secrets.choice(list(game_inputs_item["inputs"].keys()))
                 action = list()
 
                 actions.append((label, action, None))
@@ -94,8 +93,7 @@ class RecorderAgent(Agent):
                     size = game_inputs_item["inputs"]["size"]
 
                 if size == 1:
-                    input_value = random.uniform(
-                        game_inputs_item["inputs"]["minimum"],
+                    input_value = secrets.SystemRandom().uniform(game_inputs_item["inputs"]["minimum"],
                         game_inputs_item["inputs"]["maximum"]
                     )
                 else:
@@ -103,8 +101,7 @@ class RecorderAgent(Agent):
 
                     for i in range(size):
                         input_value.append(
-                            random.uniform(
-                                game_inputs_item["inputs"]["minimum"],
+                            secrets.SystemRandom().uniform(game_inputs_item["inputs"]["minimum"],
                                 game_inputs_item["inputs"]["maximum"]
                             )
                         )

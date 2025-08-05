@@ -1,14 +1,14 @@
-import random
 import uuid
 import os
 import shutil
+import secrets
 
 
 def create_training_and_validation_sets(file_paths, validation_set_probability=0.1, seed=None):
     if seed is None:
         seed = generate_seed()
 
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     
     if isinstance(file_paths, str):
         file_paths = [file_paths]
@@ -17,7 +17,7 @@ def create_training_and_validation_sets(file_paths, validation_set_probability=0
         
     for file_path in file_paths:
         file_names = os.listdir(file_path)
-        random.shuffle(file_names)
+        secrets.SystemRandom().shuffle(file_names)
 
         os.makedirs(f"datasets/current/training/{file_path.split(os.sep)[-1]}".replace("/", os.sep))
         os.makedirs(f"datasets/current/validation/{file_path.split(os.sep)[-1]}".replace("/", os.sep))
@@ -25,7 +25,7 @@ def create_training_and_validation_sets(file_paths, validation_set_probability=0
         for file_name in file_names:
             set_label = "training"
     
-            if random.random() <= validation_set_probability:
+            if secrets.SystemRandom().random() <= validation_set_probability:
                 set_label = "validation"
     
             shutil.copyfile(
